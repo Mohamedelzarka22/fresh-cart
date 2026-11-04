@@ -5,7 +5,11 @@ import { decode } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
 export async function getMyToken(): Promise<string | undefined> {
-  const x = (await cookies()).get("next-auth.session-token")?.value;
+  const cookieStore = await cookies();
+
+  const x =
+    cookieStore.get("next-auth.session-token")?.value ||
+    cookieStore.get("__Secure-next-auth.session-token")?.value;
 
   if (!x) return undefined;
 
@@ -13,8 +17,6 @@ export async function getMyToken(): Promise<string | undefined> {
     token: x,
     secret: process.env.AUTH_SECRET!,
   });
-
-  console.log(token);
 
   if (typeof token?.token === "string") {
     return token.token;
