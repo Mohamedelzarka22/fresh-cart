@@ -1,6 +1,8 @@
 
 import { getSingleProducts } from '@/apis/product'
 import CardBtn from '@/app/_components/CardBtn/CardBtn'
+import ProductImages from '@/app/_components/ProductImages/ProductImages'
+import ProductTabs from '@/app/_components/ProductTabs/ProductTabs'
 import { Product } from '@/types/product.t'
 import { FaStar } from 'react-icons/fa'
 
@@ -15,6 +17,7 @@ const ProductDetails = async ({ params }: Props) => {
     const { id } = await params
 
     const data: Product = await getSingleProducts(id)
+    console.log(data)
 
     return (
         <div className='my-12 w-full md:w-[90%]'>
@@ -22,7 +25,7 @@ const ProductDetails = async ({ params }: Props) => {
 
                 <div className='col-span-12 md:col-span-4'>
                     <div>
-                        <img src={data?.imageCover} alt={data?.title} />
+                        <ProductImages imageCover={data.imageCover} images={data.images} title={data.title} />
                     </div>
                 </div>
 
@@ -52,6 +55,15 @@ const ProductDetails = async ({ params }: Props) => {
                 </div>
 
             </div>
+
+            <ProductTabs
+                title={data.title}
+                description={data.description}
+                category={data.category.name}
+                brand={data.brand.name}
+                ratingsAverage={data.ratingsAverage}
+                ratingsQuantity={data.ratingsQuantity}
+            />
         </div>
     )
 }
